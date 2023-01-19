@@ -1,5 +1,7 @@
 import 'package:bubble_trouble_game/button.dart';
+import 'package:bubble_trouble_game/player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,54 +31,59 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Container(
-            color: Colors.pink[100],
-            child: Center(
-              child: Stack(
+    // for using keyboard
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      autofocus: true,
+      onKey: (event) {
+        if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+          moveLeft();
+        } else if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+          moveRight();
+        }
+      },
+      child: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              color: Colors.pink[100],
+              child: Center(
+                child: Stack(
+                  children: [
+                    MyPlayer(
+                      //przekazanie parametru playerX z homepage.dart do player.dart
+                      playerX: playerX,
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.grey,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                      alignment: Alignment(playerX, 1),
-                      child: Container(
-                        color: Colors.red,
-                        height: 50,
-                        width: 50,
-                      ),
-                    ),
-                  )
+                  MyButton(
+                    icon: Icons.arrow_back,
+                    function: moveLeft,
+                  ),
+                  MyButton(
+                    icon: Icons.arrow_upward,
+                    function: fireMissile,
+                  ),
+                  MyButton(
+                    icon: Icons.arrow_forward,
+                    function: moveRight,
+                  ),
                 ],
               ),
             ),
           ),
-        ),
-        Expanded(
-          child: Container(
-            color: Colors.grey,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MyButton(
-                  icon: Icons.arrow_back,
-                  function: moveLeft,
-                ),
-                MyButton(
-                  icon: Icons.arrow_upward,
-                  function: fireMissile,
-                ),
-                MyButton(
-                  icon: Icons.arrow_forward,
-                  function: moveRight,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

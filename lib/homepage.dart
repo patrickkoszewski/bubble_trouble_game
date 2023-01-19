@@ -1,3 +1,4 @@
+import 'package:bubble_trouble_game/button.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +23,18 @@ class _HomePageState extends State<HomePage> {
           child: Container(
             color: Colors.grey,
             child: Row(
-              children: [],
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MyButton(
+                  icon: Icons.arrow_back,
+                ),
+                MyButton(
+                  icon: Icons.arrow_upward,
+                ),
+                MyButton(
+                  icon: Icons.arrow_forward,
+                ),
+              ],
             ),
           ),
         ),

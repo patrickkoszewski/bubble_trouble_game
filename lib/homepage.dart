@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bubble_trouble_game/button.dart';
+import 'package:bubble_trouble_game/missile.dart';
 import 'package:bubble_trouble_game/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +19,8 @@ class _HomePageState extends State<HomePage> {
 
   //missile variables
   double missileX = playerX;
-  double missileY = 1;
   double missileHeight = 10;
+  bool midShot = false;
 
   // zapis playerX -= 0.1; == playerX = playerX - 0.1;
   // to not go of screen
@@ -30,7 +31,11 @@ class _HomePageState extends State<HomePage> {
       } else {
         playerX -= 0.1;
       }
-      missileX = playerX;
+
+      // only make the X coordinate the same when it isn't in the middle of a shot
+      if (!midShot) {
+        missileX = playerX;
+      }
     });
   }
 
@@ -41,23 +46,33 @@ class _HomePageState extends State<HomePage> {
       } else {
         playerX += 0.1;
       }
-      missileX = playerX;
+      // only make the X coordinate the same when it isn't in the middle of a shot
+      if (!midShot) {
+        missileX = playerX;
+      }
     });
   }
 
   // 3/4 ponieważ różowa część ekranu jest ustawiona na flex:3
   void fireMissile() {
-    Timer.periodic(Duration(milliseconds: 20), (timer) {
-      if (missileHeight > MediaQuery.of(context).size.height * 3 / 4) {
-        //stop missile
-        resetMissile();
-        timer.cancel();
-      } else {
+    if (midShot == false) {
+      Timer.periodic(Duration(milliseconds: 20), (timer) {
+        // shots fired
+        midShot = true;
+
+        //missile grows til it hits the top of the screen
         setState(() {
           missileHeight += 10;
         });
-      }
-    });
+
+        if (missileHeight > MediaQuery.of(context).size.height * 3 / 4) {
+          //stop missile
+          resetMissile();
+          timer.cancel();
+          midShot = false;
+        }
+      });
+    }
   }
 
   void resetMissile() {
@@ -90,13 +105,9 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: Stack(
                   children: [
-                    Container(
-                      alignment: Alignment(missileX, missileY),
-                      child: Container(
-                        width: 3,
-                        height: missileHeight,
-                        color: Colors.grey,
-                      ),
+                    MyMissile(
+                      height: missileHeight,
+                      missileX: missileX,
                     ),
                     MyPlayer(
                       //przekazanie parametru playerX z homepage.dart do player.dart

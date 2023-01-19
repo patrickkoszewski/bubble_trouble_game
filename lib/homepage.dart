@@ -15,15 +15,24 @@ class _HomePageState extends State<HomePage> {
   double playerX = 0;
 
   // zapis playerX -= 0.1; == playerX = playerX - 0.1;
+  // to not go of screen
   void moveLeft() {
     setState(() {
-      playerX -= 0.1;
+      if (playerX - 0.1 < -1) {
+        //do nothing
+      } else {
+        playerX -= 0.1;
+      }
     });
   }
 
   void moveRight() {
     setState(() {
-      playerX += 0.1;
+      if (playerX + 0.1 > 1) {
+        //do nothing
+      } else {
+        playerX += 0.1;
+      }
     });
   }
 
@@ -40,6 +49,9 @@ class _HomePageState extends State<HomePage> {
           moveLeft();
         } else if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
           moveRight();
+        }
+        if (event.isKeyPressed(LogicalKeyboardKey.space)) {
+          fireMissile();
         }
       },
       child: Column(

@@ -106,6 +106,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // converts height to coordinate
+  double heightToCoordinate(double height) {
+    double totalHeight = MediaQuery.of(context).size.height * 3 / 4;
+    double missileY = 1 - 2 * height / totalHeight;
+    return missileY;
+  }
+
   void resetMissile() {
     missileX = playerX;
     missileHeight = 10;

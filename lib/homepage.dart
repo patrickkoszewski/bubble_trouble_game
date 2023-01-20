@@ -27,29 +27,48 @@ class _HomePageState extends State<HomePage> {
 
   // ball variables
   double ballX = 0.5;
-  double ballY = 0;
+  double ballY = 1;
   var ballDirection = direction.LEFT;
 
   // START GAME
   void startGame() {
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
+    double time = 0;
+    double height = 0;
+    double velocity = 60; //how strong the jump is
+
+    Timer.periodic(Duration(milliseconds: 10), (timer) {
+      // quadratic equation that models a bounce (upside down parabola)
+      height = -5 * time * time + velocity * time;
+
+      // if the ball reaches the ground, reset jump
+      if (height < 0) {
+        time = 0;
+      }
+
+      // update the ball position
+      setState(() {
+        ballY = heightToPosition(height);
+      });
+
       //if we touch left wall change direction to right
-      if (ballX - 0.02 < -1) {
+      if (ballX - 0.005 < -1) {
         ballDirection = direction.RIGHT;
         //if we touch right wall change direction to left
-      } else if (ballX + 0.02 > 1) {
+      } else if (ballX + 0.005 > 1) {
         ballDirection = direction.LEFT;
       }
 
       if (ballDirection == direction.LEFT) {
         setState(() {
-          ballX -= 0.02;
+          ballX -= 0.005;
         });
       } else if (ballDirection == direction.RIGHT) {
         setState(() {
-          ballX += 0.02;
+          ballX += 0.005;
         });
       }
+      // keep the time going!
+      time += 0.1;
     });
   }
 
@@ -100,30 +119,30 @@ class _HomePageState extends State<HomePage> {
         if (missileHeight > MediaQuery.of(context).size.height * 3 / 4) {
           resetMissile();
           timer.cancel();
-          midShot = false;
         }
 
         // chcek if miisile has hit the ball
-        if (ballY > heightToCoordinate(missileHeight) &&
+        if (ballY > heightToPosition(missileHeight) &&
             (ballX - missileX).abs() < 0.03) {
           resetMissile();
-          ballY = 5;
+          ballX = 5;
           timer.cancel();
         }
       });
     }
   }
 
-  // converts height to coordinate
-  double heightToCoordinate(double height) {
+  // converts height to Position
+  double heightToPosition(double height) {
     double totalHeight = MediaQuery.of(context).size.height * 3 / 4;
-    double missileY = 1 - 2 * height / totalHeight;
-    return missileY;
+    double position = 1 - 2 * height / totalHeight;
+    return position;
   }
 
   void resetMissile() {
     missileX = playerX;
     missileHeight = 10;
+    midShot = false;
   }
 
   @override

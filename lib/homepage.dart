@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bubble_trouble_game/ball.dart';
 import 'package:bubble_trouble_game/button.dart';
 import 'package:bubble_trouble_game/missile.dart';
 import 'package:bubble_trouble_game/player.dart';
@@ -17,10 +18,14 @@ class _HomePageState extends State<HomePage> {
   // player variables
   static double playerX = 0;
 
-  //missile variables
+  // missile variables
   double missileX = playerX;
   double missileHeight = 10;
   bool midShot = false;
+
+  // ball variables
+  double ballX = 0.5;
+  double ballY = 0;
 
   // zapis playerX -= 0.1; == playerX = playerX - 0.1;
   // to not go of screen
@@ -105,6 +110,10 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: Stack(
                   children: [
+                    MyBall(
+                      ballX: ballX,
+                      ballY: ballY,
+                    ),
                     MyMissile(
                       height: missileHeight,
                       missileX: missileX,

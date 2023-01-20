@@ -27,6 +27,14 @@ class _HomePageState extends State<HomePage> {
   double ballX = 0.5;
   double ballY = 0;
 
+  void startGame() {
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      setState(() {
+        ballX -= 0.01;
+      });
+    });
+  }
+
   // zapis playerX -= 0.1; == playerX = playerX - 0.1;
   // to not go of screen
   void moveLeft() {
@@ -133,6 +141,10 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  MyButton(
+                    icon: Icons.play_arrow,
+                    function: startGame,
+                  ),
                   MyButton(
                     icon: Icons.arrow_back,
                     function: moveLeft,

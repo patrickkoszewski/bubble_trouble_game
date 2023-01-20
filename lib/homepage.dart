@@ -91,16 +91,24 @@ class _HomePageState extends State<HomePage> {
         // shots fired
         midShot = true;
 
-        //missile grows til it hits the top of the screen
+        // missile grows til it hits the top of the screen
         setState(() {
           missileHeight += 10;
         });
 
+        // stop missile when it reaches top of screen
         if (missileHeight > MediaQuery.of(context).size.height * 3 / 4) {
-          //stop missile
           resetMissile();
           timer.cancel();
           midShot = false;
+        }
+
+        // chcek if miisile has hit the ball
+        if (ballY > heightToCoordinate(missileHeight) &&
+            (ballX - missileX).abs() < 0.03) {
+          resetMissile();
+          ballY = 5;
+          timer.cancel();
         }
       });
     }

@@ -67,9 +67,33 @@ class _HomePageState extends State<HomePage> {
           ballX += 0.005;
         });
       }
+
+      //check if the ball hits player
+      if (playerDies()) {
+        timer.cancel();
+        _showDialog();
+      }
+
       // keep the time going!
       time += 0.1;
     });
+  }
+
+  // GAME OVER
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Colors.grey[700],
+            title: const Center(
+              child: Text(
+                'You Are DEAD!!!',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        });
   }
 
   // zapis playerX -= 0.1; == playerX = playerX - 0.1;
@@ -141,8 +165,17 @@ class _HomePageState extends State<HomePage> {
 
   void resetMissile() {
     missileX = playerX;
-    missileHeight = 10;
+    missileHeight = 0;
     midShot = false;
+  }
+
+  bool playerDies() {
+    // if ball position and player position are the same, player dies
+    if ((ballX - playerX).abs() < 0.05 && ballY > 0.95) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override

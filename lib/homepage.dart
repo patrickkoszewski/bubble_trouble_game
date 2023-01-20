@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   double ballX = 0.5;
   double ballY = 0;
 
+  // START GAME
   void startGame() {
     Timer.periodic(Duration(milliseconds: 50), (timer) {
       setState(() {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MyPlayer extends StatelessWidget {
-  // kontruktor do przekazania zmiennej playerX z homepage.dart do player.dart
   final playerX;
 
   MyPlayer({this.playerX});
